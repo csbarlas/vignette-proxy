@@ -1,6 +1,9 @@
 const express = require('express')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
+const https = require('https')
+const fs = require('fs')
+const path = require('path')
 require('dotenv').config()
 
 const PORT = process.env.PORT || 5001
@@ -20,4 +23,11 @@ app.use('/search/movie', require('./routes/search-movie'))
 //Enable cors
 app.use(cors())
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+const options = {
+	key: fs.readFileSync(path.join(__dirname, process.env.SSL_KEY)),
+	cert: fs.readFileSync(path.join(__dirname, process.env.SSL_CERT))
+}
+
+const server = https.createServer(options, app);
+
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`))

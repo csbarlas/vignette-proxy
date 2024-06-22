@@ -19,7 +19,7 @@ app.use(limiter)
 app.set('trust proxy', 1)
 
 app.use('/search/movie', require('./routes/search-movie'))
-
+app.use('/movie/:id', require('./routes/movie-detail'))
 //Enable cors
 app.use(cors())
 

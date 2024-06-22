@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 const needle = require('needle')
 const url = require('url')
 const apicache = require('apicache')
@@ -16,13 +16,11 @@ let cache = apicache.middleware
 router.get('/', cache('2 minutes'), async (req, res) => {
     try {
         const params = new URLSearchParams({
-            [API_KEY_NAME]: API_KEY_VALUE,
-            ...url.parse(req.url, true).query
+            [API_KEY_NAME]: API_KEY_VALUE
         })
-
-        const apiRes = await needle('get', `${API_BASE_URL}/search/movie?${params}`)
+        const apiRes = await needle('get', `${API_BASE_URL}/movie/${req.params.id}?${params}`)
         const data = apiRes.body
-        console.log('got to search movie')
+        
         res.status(200).json(data)
     } catch (error) {
         res.status(500).json({error})

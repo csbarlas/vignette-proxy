@@ -22,7 +22,7 @@ router.get('/', cache('2 minutes'), async (req, res) => {
 
         const apiRes = await needle('get', `${API_BASE_URL}/search/movie?${params}`)
         const data = apiRes.body
-        console.log('got to search movie')
+        
         res.status(200).json(data)
     } catch (error) {
         res.status(500).json({error})
